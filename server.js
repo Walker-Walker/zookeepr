@@ -9,6 +9,8 @@ const app = express();
 app.use(express.urlencoded({ extended: true}));
 // parse incoming JSON data
 app.use(express.json());
+//grab or route html/css aka middleware the express.static() method
+app.use(express.static('public'));
 
 function filterByQuery(query, animalsArray) {
     let personalityTraitsArray = [];
@@ -82,6 +84,8 @@ function validateAnimal(animal) {
     }
     return true;
 }
+
+
 app.get('/api/animals', (req, res) => {
    let results = animals;
    if (req.query) {
@@ -99,6 +103,11 @@ app.get('/api/animals/:id', (req, res) => {
     }
     
 });
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
 app.listen(PORT,() => {
     console.log(`API server now on port ${PORT}!`)
 });
@@ -115,4 +124,12 @@ app.post('/api/animals',(req, res) => {
         res.json(animal)
     }
     
+});
+
+app.get('/animals', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/animals.html'));
+});
+
+app.get('/zookeepers', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/zookeepers.html'));
 });
